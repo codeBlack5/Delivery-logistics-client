@@ -1,33 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
-const deliveries = [
-  {
-    id: "DL-1001",
-    recipient: "John Kamau",
-    destination: "Nairobi CBD",
-    type: "Standard",
-    status: "in_transit",
-    date: "Today",
-  },
-  {
-    id: "DL-1000",
-    recipient: "Mary Wanjiku",
-    destination: "Westlands",
-    type: "Express",
-    status: "delivered",
-    date: "Yesterday",
-  },
-  {
-    id: "DL-0999",
-    recipient: "Peter Kiptoo",
-    destination: "Kilimani",
-    type: "Standard",
-    status: "accepted",
-    date: "22 Sep 2026",
-  },
-];
+import api from "../../api/client";
 
 const statusStyles = {
   requested: "bg-slate-100 text-slate-700",
@@ -52,7 +26,33 @@ const statusLabels = {
 export default function CustomerDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
+
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await api.get("/customer/dashboard");
+        setDashboard(response.data);
+      } catch (err) {
+        console.error("Failed to load customer dashboard:", err);
+        setError(
+          err.response?.data?.error ||
+            "Unable to load your delivery dashboard.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboard();
+  }, []);
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -64,6 +64,15 @@ export default function CustomerDashboard() {
       setLoggingOut(false);
     }
   }
+
+  const stats = dashboard?.deliveries || {
+    total: 0,
+    pending: 0,
+    delivered: 0,
+    cancelled: 0,
+  };
+
+  const deliveries = dashboard?.recent_deliveries || [];
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -127,11 +136,29 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
+        {error && (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            {error}
+          </div>
+        )}
+
         <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <StatCard label="Total deliveries" value="12" />
-          <StatCard label="In transit" value="2" />
-          <StatCard label="Delivered" value="9" />
-          <StatCard label="Cancelled" value="1" />
+          <StatCard
+            label="Total deliveries"
+            value={loading ? "—" : stats.total}
+          />
+          <StatCard
+            label="Pending"
+            value={loading ? "—" : stats.pending}
+          />
+          <StatCard
+            label="Delivered"
+            value={loading ? "—" : stats.delivered}
+          />
+          <StatCard
+            label="Cancelled"
+            value={loading ? "—" : stats.cancelled}
+          />
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
@@ -148,6 +175,7 @@ export default function CustomerDashboard() {
 
               <button
                 type="button"
+                onClick={() => {}}
                 className="self-start text-sm font-semibold text-[#0F3D5E] hover:text-[#082F49]"
               >
                 View all
@@ -155,43 +183,65 @@ export default function CustomerDashboard() {
             </div>
 
             <div className="divide-y divide-slate-100">
-              {deliveries.map((delivery) => (
-                <article
-                  key={delivery.id}
-                  className="flex flex-col gap-4 px-5 py-5 sm:px-6 md:flex-row md:items-center md:justify-between"
-                >
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-bold text-slate-800">
-                        {delivery.id}
+              {loading ? (
+                <div className="px-5 py-10 text-center text-sm text-slate-500 sm:px-6">
+                  Loading your deliveries...
+                </div>
+              ) : deliveries.length === 0 ? (
+                <div className="px-5 py-10 text-center sm:px-6">
+                  <p className="font-semibold text-[#082F49]">
+                    No deliveries yet
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Create your first delivery to get started.
+                  </p>
+                </div>
+              ) : (
+                deliveries.map((delivery) => (
+                  <article
+                    key={delivery.id}
+                    className="flex flex-col gap-4 px-5 py-5 sm:px-6 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-bold text-slate-800">
+                          DL-{delivery.id}
+                        </p>
+
+                        <span
+                          className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                            statusStyles[delivery.status] ||
+                            "bg-slate-100 text-slate-700"
+                          }`}
+                        >
+                          {statusLabels[delivery.status] ||
+                            delivery.status}
+                        </span>
+                      </div>
+
+                      <p className="mt-2 text-sm text-slate-600">
+                        To {delivery.recipient_name} ·{" "}
+                        {delivery.delivery_address}
                       </p>
 
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          statusStyles[delivery.status]
-                        }`}
-                      >
-                        {statusLabels[delivery.status]}
-                      </span>
+                      <p className="mt-1 text-xs text-slate-400">
+                        {formatDeliveryType(delivery.delivery_type)} ·{" "}
+                        {formatDeliveryDate(delivery.created_at)}
+                      </p>
                     </div>
 
-                    <p className="mt-2 text-sm text-slate-600">
-                      To {delivery.recipient} · {delivery.destination}
-                    </p>
-
-                    <p className="mt-1 text-xs text-slate-400">
-                      {delivery.type} · {delivery.date}
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="self-start rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E] md:self-auto"
-                  >
-                    View
-                  </button>
-                </article>
-              ))}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(`/customer/deliveries/${delivery.id}`)
+                      }
+                      className="self-start rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E] md:self-auto"
+                    >
+                      View
+                    </button>
+                  </article>
+                ))
+              )}
             </div>
           </section>
 
@@ -227,6 +277,22 @@ export default function CustomerDashboard() {
       </section>
     </main>
   );
+}
+
+function formatDeliveryType(type) {
+  if (!type) return "";
+
+  return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+function formatDeliveryDate(date) {
+  if (!date) return "";
+
+  return new Intl.DateTimeFormat("en-KE", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
 }
 
 function StatCard({ label, value }) {
