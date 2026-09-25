@@ -8,6 +8,7 @@ export default function ProductDetails() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -32,6 +33,28 @@ export default function ProductDetails() {
 
     loadProduct();
   }, [id]);
+
+  async function addToCart() {
+    try {
+      setAddingToCart(true);
+      setError("");
+
+      await api.post("/cart/items", {
+        product_id: product.id,
+        quantity: 1,
+      });
+
+      navigate("/customer/cart");
+    } catch (err) {
+      console.error("Failed to add product to cart:", err);
+      setError(
+        err.response?.data?.error ||
+          "Unable to add this product to your cart.",
+      );
+    } finally {
+      setAddingToCart(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -138,15 +161,20 @@ export default function ProductDetails() {
               <div className="mt-8">
                 <button
                   type="button"
-                  disabled={!inStock}
+                  disabled={!inStock || addingToCart}
+                  onClick={addToCart}
                   className="w-full rounded-xl bg-[#F59E0B] px-5 py-3.5 text-sm font-bold text-[#082F49] shadow-sm transition hover:bg-[#FBBF24] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                 >
-                  {inStock ? "Add to cart" : "Out of stock"}
+                  {!inStock
+                    ? "Out of stock"
+                    : addingToCart
+                      ? "Adding to cart..."
+                      : "Add to cart"}
                 </button>
               </div>
 
               <p className="mt-3 text-center text-xs text-slate-400">
-                Cart functionality will be connected in the next shop step.
+                Your item will be added to your shopping cart.
               </p>
             </div>
           </div>
