@@ -207,6 +207,7 @@ export default function Shop() {
                     <button
                       type="button"
                       disabled={product.stock_quantity <= 0}
+                      onClick={() => navigate(`/customer/shop/${product.id}`)}
                       className="rounded-lg bg-[#F59E0B] px-3 py-2 text-sm font-bold text-[#082F49] transition hover:bg-[#FBBF24] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                     >
                       View

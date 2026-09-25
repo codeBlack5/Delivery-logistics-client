@@ -7,6 +7,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import CustomerDashboard from "./pages/customer/CustomerDashboard";
 import Shop from "./pages/customer/Shop";
+import ProductDetails from "./pages/customer/ProductDetails";
 import RiderDashboard from "./pages/rider/RiderDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
@@ -24,6 +25,7 @@ function App() {
             <Route element={<ProtectedRoute roles={["customer"]} />}>
               <Route path="/customer" element={<CustomerDashboard />} />
               <Route path="/customer/shop" element={<Shop />} />
+              <Route path="/customer/shop/:id" element={<ProductDetails />} />
             </Route>
 
             <Route element={<ProtectedRoute roles={["rider"]} />}>
