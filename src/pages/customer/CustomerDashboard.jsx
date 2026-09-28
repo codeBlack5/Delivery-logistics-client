@@ -261,6 +261,12 @@ export default function CustomerDashboard() {
               />
 
               <QuickAction
+                title="My shop orders"
+                description="View your purchases"
+                onClick={() => navigate("/customer/orders")}
+              />
+
+              <QuickAction
                 title="Track delivery"
                 description="Check current status"
                 onClick={() => {}}

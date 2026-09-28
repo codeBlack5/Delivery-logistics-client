@@ -9,6 +9,8 @@ import CustomerDashboard from "./pages/customer/CustomerDashboard";
 import Shop from "./pages/customer/Shop";
 import ProductDetails from "./pages/customer/ProductDetails";
 import Cart from "./pages/customer/Cart";
+import Orders from "./pages/customer/Orders";
+import OrderDetails from "./pages/customer/OrderDetails";
 import RiderDashboard from "./pages/rider/RiderDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
@@ -28,6 +30,8 @@ function App() {
               <Route path="/customer/shop" element={<Shop />} />
               <Route path="/customer/shop/:id" element={<ProductDetails />} />
               <Route path="/customer/cart" element={<Cart />} />
+              <Route path="/customer/orders" element={<Orders />} />
+              <Route path="/customer/orders/:id" element={<OrderDetails />} />
             </Route>
 
             <Route element={<ProtectedRoute roles={["rider"]} />}>

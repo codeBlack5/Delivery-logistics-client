@@ -8,6 +8,7 @@ export default function Cart() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingItemId, setUpdatingItemId] = useState(null);
+  const [checkingOut, setCheckingOut] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -54,6 +55,32 @@ export default function Cart() {
       );
     } finally {
       setUpdatingItemId(null);
+    }
+  }
+
+  async function checkout() {
+    try {
+      setCheckingOut(true);
+      setError("");
+
+      const response = await api.post("/orders");
+      const order = response.data?.order;
+
+      if (order?.id) {
+        navigate(`/customer/orders/${order.id}`);
+      } else {
+        navigate("/customer/orders");
+      }
+    } catch (err) {
+      console.error("Checkout failed:", err);
+
+      setError(
+        err.response?.data?.error ||
+          err.response?.data?.errors?.join(", ") ||
+          "Unable to create your order. Please try again.",
+      );
+    } finally {
+      setCheckingOut(false);
     }
   }
 
@@ -227,14 +254,15 @@ export default function Cart() {
 
               <button
                 type="button"
-                disabled
+                onClick={checkout}
+                disabled={checkingOut}
                 className="mt-6 w-full rounded-xl bg-[#F59E0B] px-5 py-3.5 text-sm font-bold text-[#082F49] shadow-sm transition hover:bg-[#FBBF24] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
               >
-                Checkout
+                {checkingOut ? "Creating order..." : "Checkout"}
               </button>
 
               <p className="mt-3 text-center text-xs text-slate-400">
-                Checkout and payment will be connected in the next shop step.
+                Your order will be created from the items currently in your cart.
               </p>
 
               <button
