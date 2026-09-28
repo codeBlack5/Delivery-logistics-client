@@ -109,6 +109,19 @@ export default function OrderDetails() {
               </div>
             </div>
 
+            {order.payment?.method === "mpesa" &&
+              order.payment?.status === "pending" && (
+                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 shadow-sm">
+                  <p className="font-bold text-amber-800">
+                    M-Pesa payment requested
+                  </p>
+                  <p className="mt-1 text-sm leading-5 text-amber-700">
+                    Check your phone and complete the M-Pesa payment prompt.
+                    Your order will be confirmed after the payment is completed.
+                  </p>
+                </div>
+              )}
+
             <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
               <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
@@ -169,6 +182,20 @@ export default function OrderDetails() {
                         : "Not assigned"
                     }
                   />
+
+                  {order.payment && (
+                    <>
+                      <SummaryRow
+                        label="Payment"
+                        value={paymentMethodLabel(order.payment.method)}
+                      />
+
+                      <SummaryRow
+                        label="Payment status"
+                        value={paymentStatusLabel(order.payment.status)}
+                      />
+                    </>
+                  )}
 
                   <div className="border-t border-slate-200 pt-4">
                     <div className="flex items-center justify-between gap-4">
@@ -269,6 +296,27 @@ function PageHeader({ onOrders, onShop, onDashboard }) {
       </div>
     </header>
   );
+}
+
+function paymentMethodLabel(method) {
+  const labels = {
+    cash: "Cash",
+    mpesa: "M-Pesa",
+    card: "Card",
+    other: "Other",
+  };
+
+  return labels[method] || method || "Not specified";
+}
+
+function paymentStatusLabel(status) {
+  const labels = {
+    pending: "Pending",
+    paid: "Paid",
+    failed: "Failed",
+  };
+
+  return labels[status] || status || "Unknown";
 }
 
 function formatPrice(price) {
