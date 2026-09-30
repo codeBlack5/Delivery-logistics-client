@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/client";
 
+import AppNavbar from "../../components/AppNavbar";
 const statusStyles = {
   pending: "bg-amber-50 text-amber-700",
   confirmed: "bg-blue-50 text-blue-700",
@@ -251,7 +252,9 @@ function StatusBadge({ status }) {
 
 function PageHeader({ onOrders, onShop, onDashboard }) {
   return (
-    <header className="border-b border-slate-200 bg-white">
+    <>
+      <AppNavbar />
+      <div className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F59E0B] font-bold text-[#082F49] shadow-sm">
@@ -260,7 +263,7 @@ function PageHeader({ onOrders, onShop, onDashboard }) {
 
           <div className="min-w-0">
             <p className="truncate font-bold text-[#082F49]">
-              Delivery Logistics
+              Steelo Logistics
             </p>
             <p className="hidden text-xs text-slate-500 sm:block">
               Workshop shop
@@ -294,7 +297,8 @@ function PageHeader({ onOrders, onShop, onDashboard }) {
           </button>
         </div>
       </div>
-    </header>
+      </div>
+    </>
   );
 }
 

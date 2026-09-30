@@ -14,6 +14,9 @@ import Orders from "./pages/customer/Orders";
 import OrderDetails from "./pages/customer/OrderDetails";
 import RiderDashboard from "./pages/rider/RiderDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import ShopDashboard from "./pages/shop/ShopDashboard";
+import ShopProducts from "./pages/shop/ShopProducts";
+import ShopProductForm from "./pages/shop/ShopProductForm";
 
 function App() {
   return (
@@ -42,6 +45,16 @@ function App() {
 
             <Route element={<ProtectedRoute roles={["admin"]} />}>
               <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
+
+            <Route element={<ProtectedRoute roles={["shop"]} />}>
+              <Route path="/shop" element={<ShopDashboard />} />
+              <Route path="/shop/products" element={<ShopProducts />} />
+              <Route path="/shop/products/new" element={<ShopProductForm />} />
+              <Route
+                path="/shop/products/:id/edit"
+                element={<ShopProductForm />}
+              />
             </Route>
           </Route>
 

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/client";
 
+import AppNavbar from "../../components/AppNavbar";
+
 export default function Shop() {
   const navigate = useNavigate();
 
@@ -26,6 +28,7 @@ export default function Shop() {
         setProducts(productsResponse.data.products || []);
       } catch (err) {
         console.error("Failed to load shop:", err);
+
         setError(
           err.response?.data?.error ||
             "Unable to load the workshop catalogue.",
@@ -49,9 +52,11 @@ export default function Shop() {
         : "/shop/products";
 
       const response = await api.get(url);
+
       setProducts(response.data.products || []);
     } catch (err) {
       console.error("Failed to filter products:", err);
+
       setError(
         err.response?.data?.error ||
           "Unable to load products for this category.",
@@ -61,32 +66,7 @@ export default function Shop() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F59E0B] font-bold text-[#082F49] shadow-sm">
-              DL
-            </div>
-
-            <div className="min-w-0">
-              <p className="truncate font-bold text-[#082F49]">
-                Delivery Logistics
-              </p>
-              <p className="hidden text-xs text-slate-500 sm:block">
-                Workshop shop
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => navigate("/customer")}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E] sm:px-4"
-          >
-            Dashboard
-          </button>
-        </div>
-      </header>
+      <AppNavbar />
 
       <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="overflow-hidden rounded-2xl bg-[#0F3D5E] shadow-lg">
@@ -120,6 +100,7 @@ export default function Shop() {
         <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-[#F59E0B]">Catalogue</p>
+
             <h2 className="mt-1 text-2xl font-bold text-[#082F49]">
               Workshop products
             </h2>
@@ -146,6 +127,7 @@ export default function Shop() {
             <p className="font-semibold text-[#082F49]">
               Loading workshop products...
             </p>
+
             <p className="mt-1 text-sm text-slate-500">
               Please wait while we load the catalogue.
             </p>
@@ -155,6 +137,7 @@ export default function Shop() {
             <p className="font-semibold text-[#082F49]">
               No products available
             </p>
+
             <p className="mt-1 text-sm text-slate-500">
               There are currently no active products in this category.
             </p>
@@ -166,10 +149,18 @@ export default function Shop() {
                 key={product.id}
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
-                <div className="flex h-44 items-center justify-center bg-slate-100">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0F3D5E] text-2xl font-bold text-[#FBBF24]">
-                    {product.name.charAt(0).toUpperCase()}
-                  </div>
+                <div className="flex h-52 items-center justify-center bg-slate-100 p-4">
+                  {product.images?.length > 0 ? (
+                    <img
+                      src={product.images[0].url}
+                      alt={product.name}
+                      className="h-full w-full rounded-xl object-contain"
+                    />
+                  ) : (
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0F3D5E] text-2xl font-bold text-[#FBBF24]">
+                      {product.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-5">
@@ -207,7 +198,9 @@ export default function Shop() {
                     <button
                       type="button"
                       disabled={product.stock_quantity <= 0}
-                      onClick={() => navigate(`/customer/shop/${product.id}`)}
+                      onClick={() =>
+                        navigate(`/customer/shop/${product.id}`)
+                      }
                       className="rounded-lg bg-[#F59E0B] px-3 py-2 text-sm font-bold text-[#082F49] transition hover:bg-[#FBBF24] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                     >
                       View

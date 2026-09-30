@@ -6,12 +6,14 @@ const roleLabels = {
   customer: "Customer",
   rider: "Rider",
   admin: "Administrator",
+  shop: "Shop",
 };
 
 const rolePaths = {
   customer: "/customer",
   rider: "/rider",
   admin: "/admin",
+  shop: "/shop",
 };
 
 export default function Dashboard() {
@@ -48,7 +50,7 @@ export default function Dashboard() {
 
             <div className="min-w-0">
               <p className="truncate font-bold text-[#082F49]">
-                Delivery Logistics
+                Steelo Logistics
               </p>
               <p className="hidden text-xs text-slate-500 sm:block">
                 Reliable delivery management
@@ -83,7 +85,7 @@ export default function Dashboard() {
               </h1>
 
               <p className="mt-4 max-w-2xl text-sm leading-6 text-blue-100/80 sm:text-base sm:leading-7">
-                Your Delivery Logistics workspace is ready. Manage your
+                Your Steelo Logistics workspace is ready. Manage your
                 deliveries and keep everything moving from one place.
               </p>
             </div>

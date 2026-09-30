@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/client";
 
+import AppNavbar from "../../components/AppNavbar";
 export default function Checkout() {
   const navigate = useNavigate();
 

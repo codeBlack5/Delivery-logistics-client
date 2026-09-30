@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/client";
 
+import AppNavbar from "../../components/AppNavbar";
 const statusStyles = {
   pending: "bg-amber-50 text-amber-700",
   confirmed: "bg-blue-50 text-blue-700",
@@ -51,11 +52,7 @@ export default function Orders() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <PageHeader
-        onShop={() => navigate("/customer/shop")}
-        onCart={() => navigate("/customer/cart")}
-        onDashboard={() => navigate("/customer")}
-      />
+      <AppNavbar />
 
       <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-6">
@@ -177,55 +174,6 @@ function StatusBadge({ status }) {
     >
       {statusLabels[status] || status}
     </span>
-  );
-}
-
-function PageHeader({ onShop, onCart, onDashboard }) {
-  return (
-    <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F59E0B] font-bold text-[#082F49] shadow-sm">
-            DL
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate font-bold text-[#082F49]">
-              Delivery Logistics
-            </p>
-            <p className="hidden text-xs text-slate-500 sm:block">
-              Workshop shop
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onShop}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E]"
-          >
-            Shop
-          </button>
-
-          <button
-            type="button"
-            onClick={onCart}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E]"
-          >
-            Cart
-          </button>
-
-          <button
-            type="button"
-            onClick={onDashboard}
-            className="rounded-lg bg-[#0F3D5E] px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#082F49]"
-          >
-            Dashboard
-          </button>
-        </div>
-      </div>
-    </header>
   );
 }
 

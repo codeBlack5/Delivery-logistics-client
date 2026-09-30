@@ -73,7 +73,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                  <p className="text-lg font-bold">Delivery Logistics</p>
+                  <p className="text-lg font-bold">Steelo Logistics</p>
                   <p className="text-xs text-blue-100/70">
                     Reliable delivery management
                   </p>
@@ -101,7 +101,7 @@ export default function Register() {
 
             <div className="relative flex items-center justify-between gap-4">
               <p className="text-sm text-blue-100/60">
-                Delivery Logistics MVP
+                Steelo Logistics
               </p>
 
               <div className="h-1 w-16 rounded-full bg-[#F59E0B]" />
@@ -119,7 +119,7 @@ export default function Register() {
 
                 <div>
                   <p className="font-bold text-[#0F3D5E]">
-                    Delivery Logistics
+                    Steelo Logistics
                   </p>
                   <p className="text-xs text-slate-500">
                     Reliable delivery management

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/client";
 
+import AppNavbar from "../../components/AppNavbar";
+
 export default function ProductDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -10,6 +12,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
   const [error, setError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     async function loadProduct() {
@@ -18,7 +21,10 @@ export default function ProductDetails() {
         setError("");
 
         const response = await api.get(`/shop/products/${id}`);
-        setProduct(response.data.product);
+        const loadedProduct = response.data.product;
+
+        setProduct(loadedProduct);
+        setSelectedImage(loadedProduct.images?.[0] || null);
       } catch (err) {
         console.error("Failed to load product:", err);
 
@@ -47,6 +53,7 @@ export default function ProductDetails() {
       navigate("/customer/cart");
     } catch (err) {
       console.error("Failed to add product to cart:", err);
+
       setError(
         err.response?.data?.error ||
           "Unable to add this product to your cart.",
@@ -59,13 +66,14 @@ export default function ProductDetails() {
   if (loading) {
     return (
       <main className="min-h-screen bg-slate-50">
-        <PageHeader onBack={() => navigate("/customer/shop")} />
+        <AppNavbar />
 
         <section className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
             <p className="font-semibold text-[#082F49]">
               Loading product...
             </p>
+
             <p className="mt-1 text-sm text-slate-500">
               Please wait while we load the product details.
             </p>
@@ -78,7 +86,7 @@ export default function ProductDetails() {
   if (error || !product) {
     return (
       <main className="min-h-screen bg-slate-50">
-        <PageHeader onBack={() => navigate("/customer/shop")} />
+        <AppNavbar />
 
         <section className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-12 text-center">
@@ -103,7 +111,7 @@ export default function ProductDetails() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <PageHeader onBack={() => navigate("/customer/shop")} />
+      <AppNavbar />
 
       <section className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <button
@@ -116,10 +124,43 @@ export default function ProductDetails() {
 
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="grid lg:grid-cols-2">
-            <div className="flex min-h-80 items-center justify-center bg-slate-100 p-8 sm:min-h-96">
-              <div className="flex h-28 w-28 items-center justify-center rounded-3xl bg-[#0F3D5E] text-5xl font-bold text-[#FBBF24] shadow-lg">
-                {product.name.charAt(0).toUpperCase()}
+            <div className="bg-slate-100 p-5 sm:p-6">
+              <div className="flex h-[22rem] items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 sm:h-[26rem] sm:p-7">
+                {selectedImage ? (
+                  <img
+                    src={selectedImage.url}
+                    alt={product.name}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <div className="flex h-28 w-28 items-center justify-center rounded-3xl bg-[#0F3D5E] text-5xl font-bold text-[#FBBF24] shadow-lg">
+                    {product.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
+
+              {product.images?.length > 1 && (
+                <div className="mt-4 grid grid-cols-4 gap-3 sm:grid-cols-5">
+                  {product.images.map((image) => (
+                    <button
+                      key={image.id}
+                      type="button"
+                      onClick={() => setSelectedImage(image)}
+                      className={`aspect-square overflow-hidden rounded-xl border-2 bg-white p-1 transition ${
+                        selectedImage?.id === image.id
+                          ? "border-[#F59E0B]"
+                          : "border-transparent hover:border-slate-300"
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={product.name}
+                        className="h-full w-full rounded-lg object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="p-6 sm:p-8 lg:p-10">
@@ -181,37 +222,6 @@ export default function ProductDetails() {
         </div>
       </section>
     </main>
-  );
-}
-
-function PageHeader({ onBack }) {
-  return (
-    <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F59E0B] font-bold text-[#082F49] shadow-sm">
-            DL
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate font-bold text-[#082F49]">
-              Delivery Logistics
-            </p>
-            <p className="hidden text-xs text-slate-500 sm:block">
-              Workshop shop
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#0F3D5E] hover:text-[#0F3D5E] sm:px-4"
-        >
-          Shop
-        </button>
-      </div>
-    </header>
   );
 }
 

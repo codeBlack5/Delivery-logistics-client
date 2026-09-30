@@ -65,7 +65,7 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <p className="text-lg font-bold">Delivery Logistics</p>
+                  <p className="text-lg font-bold">Steelo Logistics</p>
                   <p className="text-xs text-blue-100/70">
                     Reliable delivery management
                   </p>
@@ -93,7 +93,7 @@ export default function Login() {
 
             <div className="relative flex items-center justify-between gap-4">
               <p className="text-sm text-blue-100/60">
-                Delivery Logistics MVP
+                Steelo Logistics
               </p>
 
               <div className="h-1 w-16 rounded-full bg-[#F59E0B]" />
@@ -111,7 +111,7 @@ export default function Login() {
 
                 <div>
                   <p className="font-bold text-[#0F3D5E]">
-                    Delivery Logistics
+                    Steelo Logistics
                   </p>
                   <p className="text-xs text-slate-500">
                     Reliable delivery management
@@ -196,7 +196,7 @@ export default function Login() {
 
               <div className="mt-8 border-t border-slate-200 pt-6 text-center">
                 <p className="text-sm text-slate-500">
-                  New to Delivery Logistics?{" "}
+                  New to Steelo Logistics?{" "}
                   <Link
                     to="/register"
                     className="font-semibold text-[#0F3D5E] underline decoration-[#F59E0B] underline-offset-4 transition hover:text-[#082F49]"
