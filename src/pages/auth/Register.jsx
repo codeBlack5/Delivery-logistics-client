@@ -6,6 +6,8 @@ export default function Register() {
   const { register, user } = useAuth();
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -223,18 +225,29 @@ export default function Register() {
                       Password
                     </label>
 
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="new-password"
-                      value={form.password}
-                      onChange={handleChange}
-                      required
-                      minLength={6}
-                      className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
-                      placeholder="At least 6 characters"
-                    />
+                    <div className="relative">
+                      <input
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        value={form.password}
+                        onChange={handleChange}
+                        required
+                        minLength={6}
+                        className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
+                        placeholder="At least 6 characters"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((visible) => !visible)}
+                        aria-controls="password"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        className="absolute inset-y-0 right-3 rounded text-sm font-semibold text-[#0F3D5E] hover:text-[#082F49] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]"
+                      >
+                        {showPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </div>
 
                   <div>
@@ -245,18 +258,29 @@ export default function Register() {
                       Confirm password
                     </label>
 
-                    <input
-                      id="password_confirmation"
-                      name="password_confirmation"
-                      type="password"
-                      autoComplete="new-password"
-                      value={form.password_confirmation}
-                      onChange={handleChange}
-                      required
-                      minLength={6}
-                      className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
-                      placeholder="Repeat password"
-                    />
+                    <div className="relative">
+                      <input
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        type={showConfirmation ? "text" : "password"}
+                        autoComplete="new-password"
+                        value={form.password_confirmation}
+                        onChange={handleChange}
+                        required
+                        minLength={6}
+                        className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
+                        placeholder="Repeat password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmation((visible) => !visible)}
+                        aria-controls="password_confirmation"
+                        aria-label={showConfirmation ? "Hide confirmation password" : "Show confirmation password"}
+                        className="absolute inset-y-0 right-3 rounded text-sm font-semibold text-[#0F3D5E] hover:text-[#082F49] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]"
+                      >
+                        {showConfirmation ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </div>
                 </div>
 

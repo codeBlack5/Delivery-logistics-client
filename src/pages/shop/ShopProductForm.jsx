@@ -10,6 +10,13 @@ const initialForm = {
   description: "",
   price: "",
   stock_quantity: "",
+  part_number: "",
+  oem_reference: "",
+  vehicle_make: "",
+  vehicle_model: "",
+  year_from: "",
+  year_to: "",
+  part_condition: "new",
   active: true,
 };
 
@@ -53,6 +60,13 @@ export default function ShopProductForm() {
             description: product.description || "",
             price: product.price ?? "",
             stock_quantity: product.stock_quantity ?? "",
+            part_number: product.part_number || "",
+            oem_reference: product.oem_reference || "",
+            vehicle_make: product.vehicle_make || "",
+            vehicle_model: product.vehicle_model || "",
+            year_from: product.year_from ?? "",
+            year_to: product.year_to ?? "",
+            part_condition: product.part_condition || "new",
             active: product.active,
           });
 
@@ -109,6 +123,13 @@ export default function ShopProductForm() {
       payload.append("description", form.description.trim());
       payload.append("price", form.price);
       payload.append("stock_quantity", form.stock_quantity);
+      payload.append("part_number", form.part_number.trim());
+      payload.append("oem_reference", form.oem_reference.trim());
+      payload.append("vehicle_make", form.vehicle_make.trim());
+      payload.append("vehicle_model", form.vehicle_model.trim());
+      payload.append("year_from", form.year_from);
+      payload.append("year_to", form.year_to);
+      payload.append("part_condition", form.part_condition);
       payload.append("active", form.active ? "true" : "false");
 
       selectedImages.forEach((image) => {
@@ -197,7 +218,7 @@ export default function ShopProductForm() {
                   onChange={handleChange}
                   required
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#F59E0B] focus:ring-2 focus:ring-[#F59E0B]/20"
-                  placeholder="e.g. Dining Table"
+                  placeholder="e.g. Toyota Corolla Brake Pads"
                 />
               </div>
 
@@ -216,8 +237,76 @@ export default function ShopProductForm() {
                   value={form.description}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#F59E0B] focus:ring-2 focus:ring-[#F59E0B]/20"
-                  placeholder="Describe your product..."
+                  placeholder="Describe the spare part, specifications, and compatibility..."
                 />
+              </div>
+
+              <div>
+                <label htmlFor="part_number" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Part Number
+                </label>
+                <input id="part_number" name="part_number" value={form.part_number} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="e.g. BP-001" />
+              </div>
+
+              <div>
+                <label htmlFor="oem_reference" className="mb-2 block text-sm font-semibold text-slate-700">
+                  OEM Reference
+                </label>
+                <input id="oem_reference" name="oem_reference" value={form.oem_reference} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="Original equipment number" />
+              </div>
+
+              <div>
+                <label htmlFor="vehicle_make" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Vehicle Make
+                </label>
+                <input id="vehicle_make" name="vehicle_make" value={form.vehicle_make} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="e.g. Toyota" />
+              </div>
+
+              <div>
+                <label htmlFor="vehicle_model" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Vehicle Model
+                </label>
+                <input id="vehicle_model" name="vehicle_model" value={form.vehicle_model} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="e.g. Corolla" />
+              </div>
+
+              <div>
+                <label htmlFor="year_from" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Compatible From Year
+                </label>
+                <input id="year_from" name="year_from" type="number" min="1900" max="2100"
+                  value={form.year_from} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="e.g. 2015" />
+              </div>
+
+              <div>
+                <label htmlFor="year_to" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Compatible To Year
+                </label>
+                <input id="year_to" name="year_to" type="number" min="1900" max="2100"
+                  value={form.year_to} onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]"
+                  placeholder="e.g. 2022" />
+              </div>
+
+              <div>
+                <label htmlFor="part_condition" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Part Condition
+                </label>
+                <select id="part_condition" name="part_condition" value={form.part_condition} onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-[#F59E0B]">
+                  <option value="new">New</option>
+                  <option value="used">Used</option>
+                </select>
               </div>
 
               <div>

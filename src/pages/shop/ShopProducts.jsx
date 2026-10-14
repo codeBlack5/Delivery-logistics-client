@@ -129,6 +129,27 @@ export default function ShopProducts() {
                   {product.description || "No description provided."}
                 </p>
 
+                <div className="mt-4 space-y-2 rounded-xl bg-slate-50 p-3 text-sm">
+                  {product.part_number && (
+                    <p><span className="font-semibold text-slate-600">Part number:</span> {product.part_number}</p>
+                  )}
+                  {product.oem_reference && (
+                    <p><span className="font-semibold text-slate-600">OEM reference:</span> {product.oem_reference}</p>
+                  )}
+                  {(product.vehicle_make || product.vehicle_model) && (
+                    <p>
+                      <span className="font-semibold text-slate-600">Fits:</span>{" "}
+                      {[product.vehicle_make, product.vehicle_model].filter(Boolean).join(" ")}
+                      {(product.year_from || product.year_to) &&
+                        ` (${product.year_from || "Any year"}–${product.year_to || "Present"})`}
+                    </p>
+                  )}
+                  <p>
+                    <span className="font-semibold text-slate-600">Condition:</span>{" "}
+                    {product.part_condition === "used" ? "Used" : "New"}
+                  </p>
+                </div>
+
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <div className="rounded-xl bg-slate-50 p-3">
                     <p className="text-xs font-semibold uppercase text-slate-400">

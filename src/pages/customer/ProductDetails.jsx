@@ -30,7 +30,7 @@ export default function ProductDetails() {
 
         setError(
           err.response?.data?.error ||
-            "Unable to load this workshop product.",
+            "Unable to load this spare part.",
         );
       } finally {
         setLoading(false);
@@ -195,9 +195,22 @@ export default function ProductDetails() {
 
                 <p className="mt-3 text-sm leading-7 text-slate-600">
                   {product.description ||
-                    "This is a workshop-made product. Contact us for more information about this item."}
+                    "Contact the shop for more information about this spare part."}
                 </p>
               </div>
+
+              {(product.part_number || product.oem_reference || product.vehicle_make || product.vehicle_model || product.year_from || product.year_to || product.part_condition) && (
+                <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <h2 className="text-sm font-bold uppercase tracking-wide text-[#082F49]">Spare-part details</h2>
+                  <dl className="mt-3 space-y-3 text-sm">
+                    {product.part_number && <div className="flex justify-between gap-3"><dt className="text-slate-500">Part number</dt><dd className="font-semibold">{product.part_number}</dd></div>}
+                    {product.oem_reference && <div className="flex justify-between gap-3"><dt className="text-slate-500">OEM reference</dt><dd className="font-semibold">{product.oem_reference}</dd></div>}
+                    {(product.vehicle_make || product.vehicle_model) && <div className="flex justify-between gap-3"><dt className="text-slate-500">Compatible vehicle</dt><dd className="font-semibold">{[product.vehicle_make, product.vehicle_model].filter(Boolean).join(" ")}</dd></div>}
+                    {(product.year_from || product.year_to) && <div className="flex justify-between gap-3"><dt className="text-slate-500">Compatible years</dt><dd className="font-semibold">{product.year_from || "Not specified"} – {product.year_to || "Not specified"}</dd></div>}
+                    {product.part_condition && <div className="flex justify-between gap-3"><dt className="text-slate-500">Condition</dt><dd className="font-semibold capitalize">{product.part_condition}</dd></div>}
+                  </dl>
+                </div>
+              )}
 
               <div className="mt-8">
                 <button

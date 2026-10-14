@@ -6,6 +6,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -172,17 +173,28 @@ export default function Login() {
                     Password
                   </label>
 
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                    className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
-                    placeholder="Enter your password"
-                  />
+                  <div className="relative">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      value={form.password}
+                      onChange={handleChange}
+                      required
+                      className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#0F3D5E] focus:ring-2 focus:ring-[#0F3D5E]/10"
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      aria-controls="password"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute inset-y-0 right-3 rounded text-sm font-semibold text-[#0F3D5E] hover:text-[#082F49] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
                 </div>
 
                 <button
